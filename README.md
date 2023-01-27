@@ -1,6 +1,6 @@
 # WebX Demo Server
 
-A demo server using the webx-relay 
+A demo server using the webx-relay library.
 
 ### Running
 
