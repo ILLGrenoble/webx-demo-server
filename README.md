@@ -1,17 +1,17 @@
-# WebX Relay
+# WebX Demo Server
 
-A relay server for connecting to WebX
+A demo server using the webx-relay 
 
 ### Running
 
-Package:
+build:
 
 ```
 mvn package
 ```
 
-Build:
+run:
 
 ```
-java -jar target/webx.jar --port 8080
+java -jar target/webx-demo.jar
 ```
