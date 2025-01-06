@@ -7,7 +7,7 @@ A demo server using the webx-relay library.
 build:
 
 ```
-mvn package
+./mvnw package
 ```
 
 run:
