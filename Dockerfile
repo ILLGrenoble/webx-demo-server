@@ -1,4 +1,4 @@
-FROM maven:3.6-openjdk-14 as builder
+FROM openjdk:21-jdk AS builder
 
 ARG MAVEN_OPTS
 
@@ -6,15 +6,15 @@ WORKDIR /app
 
 COPY . .
 
-RUN mvn package -B -DskipTests=true $MAVEN_OPTS
+RUN ./mvnw clean package -B -DskipTests=true $MAVEN_OPTS
 
-FROM openjdk:14-alpine
+FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 
 # copy built application
 COPY --from=builder /app/target/webx-demo.jar /app
 
-CMD java -jar /app/webx-demo.jar
+CMD ["java", "-jar", "/app/webx-demo.jar"]
 
 EXPOSE 8080
