@@ -48,9 +48,11 @@ java -jar target/webx-demo.jar
 
 ### Development with the WebX Demo Client and WebX Dev Workspace
 
-To have a fully functional WebX stack, the easiest way is to run the [WebX Dev Workspace](https://github.com/ILLGrenoble/webx-dev-workspace) either with a standalone WebX Engine or a multiuser WebX Router.
+To develop the full WebX stack, the easiest way is to run the [WebX Dev Workspace](https://github.com/ILLGrenoble/webx-dev-workspace) either with a standalone WebX Engine or a multiuser WebX Router.
 
 The workspace runs a devcontainer that installs the necessary dependencies to build and run the Remote Desktop stack. The WebX Engine, WebX Router and WebX Session Manager can be compiled and run by hand inside this environment. Please see the README in this project for more details.
+
+If you don't want to develop the full stack and just develop the demo, a preconfigured WebX Remote Desktop host can be run inside a container. Please refer to [WebX Demo Deploy](https://github.com/ILLGrenoble/webx-demo-deploy?tab=readme-ov-file#running-the-demo-with-pre-configured-webx-host) on running the standalone and multiuser environments in a simple docker environment. 
 
 The [WebX Demo Client](https://github.com/ILLGrenoble/webx-demo-client) is used to connect to the WebX Demo Server to facilitate testing. The README in this project show you how to build and start the WebX Demo Client.
 
@@ -66,7 +68,7 @@ IntelliJ will now treat the dependency project as part of the workspace and chan
 
 ## Running the full WebX Demo with Docker
 
-The project [WebX Demo Deploy](https://github.com/ILLGrenoble/webx-demo-deploy) provides the simplest way of running the WebX Demo. You need to have a running WebX host with either WebX Engine already running or the full WebX stack (including the router and session manager): as mentioned above the easiest way of doing this is by running the [WebX Dev Workspace](https://github.com/ILLGrenoble/webx-dev-workspace).
+The project [WebX Demo Deploy](https://github.com/ILLGrenoble/webx-demo-deploy) provides the simplest way of running the WebX Demo. You need to have a running WebX host with either WebX Engine already running or the full WebX stack (including the router and session manager): as mentioned above the easiest way of doing this is by building and running the preconfigured docker environments in the [WebX Demo Deploy](https://github.com/ILLGrenoble/webx-demo-deploy?tab=readme-ov-file#running-the-demo-with-pre-configured-webx-host) project.
 
 In a terminal, clone the deploy project:
 
