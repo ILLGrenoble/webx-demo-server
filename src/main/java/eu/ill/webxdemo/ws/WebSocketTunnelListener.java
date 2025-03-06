@@ -20,6 +20,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketTunnelListener.class);
     private static final String WEBX_HOST_PARAM = "webxhost";
     private static final String WEBX_PORT_PARAM = "webxport";
+    private static final String WEBX_SESSION_ID_PARAM = "sessionid";
     private static final String TOKEN_PARAM = "token";
     private static final String WIDTH_PARAM = "width";
     private static final String HEIGHT_PARAM = "height";
@@ -52,26 +53,38 @@ public class WebSocketTunnelListener implements WebSocketListener {
             String hostname = this.getStringParam(params, WEBX_HOST_PARAM);
             webXConfiguration = new WebXConfiguration(hostname, port, false);
 
-            String token = this.getStringParam(params, TOKEN_PARAM);
-            Credentials credentials = AuthService.instance().getCredentials(token);
-            if (!credentials.isValid()) {
-                logger.warn("Connection credentials are invalid. Disconnecting");
-                session.close();
-                return;
+
+            String sessionId = this.getStringParam(params, WEBX_SESSION_ID_PARAM);
+            if (sessionId != null) {
+                if (sessionId.length() != 32) {
+                    logger.error("SessionId {} is invalid", sessionId);
+                    session.close();
+                    return;
+                }
+                clientInformation = new WebXClientInformation(sessionId);
+
+            } else {
+                String token = this.getStringParam(params, TOKEN_PARAM);
+                Credentials credentials = AuthService.instance().getCredentials(token);
+                if (!credentials.isValid()) {
+                    logger.warn("Connection credentials are invalid. Disconnecting");
+                    session.close();
+                    return;
+                }
+                String username = credentials.getUsername();
+                String password = credentials.getPassword();
+
+                Integer width = this.getIntegerParam(params, WIDTH_PARAM);
+                Integer height = this.getIntegerParam(params, HEIGHT_PARAM);
+                String keyboard = this.getStringParam(params, KEYBOARD_PARAM);
+
+                clientInformation = new WebXClientInformation(
+                        username,
+                        password,
+                        width != null ? width : configuration.getDefaultScreenWidth(),
+                        height != null ? height : configuration.getDefaultScreenHeight(),
+                        keyboard != null ? keyboard : configuration.getDefaultKeyboardLayout());
             }
-            String username = credentials.getUsername();
-            String password = credentials.getPassword();
-
-            Integer width = this.getIntegerParam(params, WIDTH_PARAM);
-            Integer height = this.getIntegerParam(params, HEIGHT_PARAM);
-            String keyboard = this.getStringParam(params, KEYBOARD_PARAM);
-
-            clientInformation = new WebXClientInformation(
-                    username,
-                    password,
-                    width != null ? width : configuration.getDefaultScreenWidth(),
-                    height != null ? height : configuration.getDefaultScreenHeight(),
-                    keyboard != null ? keyboard : configuration.getDefaultKeyboardLayout());
         }
 
 
