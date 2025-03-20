@@ -34,10 +34,8 @@ public class ConnectionThread extends Thread {
     public void run() {
 
         try {
-            this.tunnel.start();
-
             byte[] messageData;
-            while (tunnel.isRunning() && (messageData = tunnel.read()) != null) {
+            while (tunnel.isConnected() && (messageData = tunnel.read()) != null) {
                 this.sendData(messageData);
             }
 
@@ -55,8 +53,8 @@ public class ConnectionThread extends Thread {
         this.tunnel.disconnect();
     }
 
-    public boolean isRunning() {
-        return this.tunnel.isRunning();
+    public boolean isConnected() {
+        return this.tunnel.isConnected();
     }
 
     private void sendData(byte[] data) {

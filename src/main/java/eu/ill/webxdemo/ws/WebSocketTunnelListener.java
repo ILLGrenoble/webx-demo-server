@@ -1,9 +1,12 @@
 package eu.ill.webxdemo.ws;
 
-import eu.ill.webx.WebXClientInformation;
-import eu.ill.webx.WebXConfiguration;
+import eu.ill.webx.WebXHostConfiguration;
 import eu.ill.webx.WebXTunnel;
 import eu.ill.webx.exceptions.WebXConnectionException;
+import eu.ill.webx.configuration.WebXConnectionConfiguration;
+import eu.ill.webx.configuration.WebXSessionCreationConfiguration;
+import eu.ill.webx.configuration.WebXSessionJoinConfiguration;
+import eu.ill.webx.configuration.WebXStandaloneSessionConfiguration;
 import eu.ill.webxdemo.Configuration;
 import eu.ill.webxdemo.model.Credentials;
 import eu.ill.webxdemo.services.AuthService;
@@ -37,13 +40,15 @@ public class WebSocketTunnelListener implements WebSocketListener {
     @Override
     public void onWebSocketConnect(final Session session) {
 
-        WebXClientInformation clientInformation = null;
-        WebXConfiguration webXConfiguration;
+        WebXConnectionConfiguration connectionConfiguration = null;
+        WebXHostConfiguration webXConfiguration;
 
         if (this.configuration.getStandaloneHost() != null && this.configuration.getStandalonePort() != null) {
             String hostname = this.configuration.getStandaloneHost();
             Integer port = this.configuration.getStandalonePort();
-            webXConfiguration = new WebXConfiguration(hostname, port, true);
+            webXConfiguration = new WebXHostConfiguration(hostname, port, true);
+
+            connectionConfiguration = new WebXStandaloneSessionConfiguration();
 
         } else {
             Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
@@ -51,7 +56,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
             // Get all the other params
             Integer port = this.getIntegerParam(params, WEBX_PORT_PARAM);
             String hostname = this.getStringParam(params, WEBX_HOST_PARAM);
-            webXConfiguration = new WebXConfiguration(hostname, port, false);
+            webXConfiguration = new WebXHostConfiguration(hostname, port, false);
 
 
             String sessionId = this.getStringParam(params, WEBX_SESSION_ID_PARAM);
@@ -61,7 +66,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
                     session.close();
                     return;
                 }
-                clientInformation = new WebXClientInformation(sessionId);
+                connectionConfiguration = new WebXSessionJoinConfiguration(sessionId);
 
             } else {
                 String token = this.getStringParam(params, TOKEN_PARAM);
@@ -78,7 +83,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
                 Integer height = this.getIntegerParam(params, HEIGHT_PARAM);
                 String keyboard = this.getStringParam(params, KEYBOARD_PARAM);
 
-                clientInformation = new WebXClientInformation(
+                connectionConfiguration = new WebXSessionCreationConfiguration(
                         username,
                         password,
                         width != null ? width : configuration.getDefaultScreenWidth(),
@@ -91,7 +96,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
         // Connect to host
         try {
             WebXTunnel tunnel = new WebXTunnel();
-            tunnel.connect(webXConfiguration, clientInformation);
+            tunnel.connect(webXConfiguration, connectionConfiguration);
 
             // Create thread to read from tunnel
             this.connectionThread = new ConnectionThread(tunnel, session);
@@ -111,7 +116,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
 
     @Override
     public void onWebSocketBinary(byte[] payload, int offset, int length) {
-        if (this.connectionThread != null && this.connectionThread.isRunning()) {
+        if (this.connectionThread != null && this.connectionThread.isConnected()) {
             this.connectionThread.write(payload);
 
         } else {

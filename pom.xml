@@ -22,8 +22,8 @@
     </organization>
 
     <properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <jetty.version>9.4.15.v20190215</jetty.version>
         <jersey.version>2.35</jersey.version>
         <guice.version>5.0.1</guice.version>
