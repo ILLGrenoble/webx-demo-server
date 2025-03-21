@@ -27,7 +27,7 @@ public class ConnectionThread extends Thread {
             this.tunnel.write(data);
 
         } catch (WebXClientException exception) {
-            logger.debug("Connection to webx server is closed", exception);
+            logger.debug("Connection to WebX server is closed", exception);
         }
     }
 

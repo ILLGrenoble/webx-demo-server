@@ -100,7 +100,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
             connectionThread.start();
 
         } catch (WebXConnectionException exception) {
-            logger.error("Failed to connect to webx server. Client not created: {}", exception.getMessage());
+            logger.error("Failed to connect to WebX server. Client not created: {}", exception.getMessage());
             session.close();
         }
 
