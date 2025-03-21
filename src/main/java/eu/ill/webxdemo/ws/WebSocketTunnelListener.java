@@ -1,6 +1,6 @@
 package eu.ill.webxdemo.ws;
 
-import eu.ill.webx.WebXHostConfiguration;
+import eu.ill.webx.configuration.WebXHostConfiguration;
 import eu.ill.webx.WebXTunnel;
 import eu.ill.webx.exceptions.WebXConnectionException;
 import eu.ill.webx.configuration.WebXConnectionConfiguration;
