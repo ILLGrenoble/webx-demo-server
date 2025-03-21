@@ -3,6 +3,7 @@ package eu.ill.webxdemo.ws;
 import eu.ill.webx.WebXTunnel;
 import eu.ill.webx.exceptions.WebXClientException;
 import eu.ill.webx.exceptions.WebXConnectionInterruptException;
+import eu.ill.webx.exceptions.WebXDisconnectedException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,9 @@ public class ConnectionThread extends Thread {
 
         } catch (WebXConnectionInterruptException exception) {
             logger.error("WebSocket connection terminated due to interruption {}", exception.getMessage());
+
+        } catch (WebXDisconnectedException exception) {
+            logger.error("WebSocket connection terminated due to disconnection {}", exception.getMessage());
         }
 
         this.session.close();

@@ -89,11 +89,9 @@ public class WebSocketTunnelListener implements WebSocketListener {
             }
         }
 
-
-        // Connect to host
         try {
-            WebXTunnel tunnel = new WebXTunnel();
-            tunnel.connect(webXConfiguration, clientConfiguration);
+            // Connect to host
+            WebXTunnel tunnel = WebXTunnel.Connect(webXConfiguration, clientConfiguration);
 
             // Create thread to read from tunnel
             this.connectionThread = new ConnectionThread(tunnel, session);
