@@ -1,6 +1,7 @@
 package eu.ill.webxdemo.ws;
 
 import eu.ill.webx.WebXClientConfiguration;
+import eu.ill.webx.WebXEngineConfiguration;
 import eu.ill.webx.WebXHostConfiguration;
 import eu.ill.webx.WebXTunnel;
 import eu.ill.webx.exceptions.WebXConnectionException;
@@ -37,7 +38,8 @@ public class WebSocketTunnelListener implements WebSocketListener {
     @Override
     public void onWebSocketConnect(final Session session) {
 
-        WebXClientConfiguration clientConfiguration = null;
+        WebXClientConfiguration clientConfiguration;
+        WebXEngineConfiguration engineConfiguration = null;
         WebXHostConfiguration webXConfiguration;
 
         if (this.configuration.getStandaloneHost() != null && this.configuration.getStandalonePort() != null) {
@@ -86,12 +88,16 @@ public class WebSocketTunnelListener implements WebSocketListener {
                         width != null ? width : configuration.getDefaultScreenWidth(),
                         height != null ? height : configuration.getDefaultScreenHeight(),
                         keyboard != null ? keyboard : configuration.getDefaultKeyboardLayout());
+
+                engineConfiguration = new WebXEngineConfiguration();
+                engineConfiguration.setParameter("logLevel", "debug");
+                engineConfiguration.setParameter("runtimeMaxQualityIndex", "12");
             }
         }
 
         try {
             // Connect to host
-            WebXTunnel tunnel = WebXTunnel.Connect(webXConfiguration, clientConfiguration);
+            WebXTunnel tunnel = WebXTunnel.Connect(webXConfiguration, clientConfiguration, engineConfiguration);
 
             // Create thread to read from tunnel
             this.connectionThread = new ConnectionThread(tunnel, session);
