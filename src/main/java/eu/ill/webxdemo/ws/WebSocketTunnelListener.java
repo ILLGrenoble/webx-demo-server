@@ -26,6 +26,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
     private static final String WIDTH_PARAM = "width";
     private static final String HEIGHT_PARAM = "height";
     private static final String KEYBOARD_PARAM = "keyboard";
+    private static final String WEBX_CLIENT_VERSION = "client-version";
 
     private final Configuration configuration;
 
@@ -42,21 +43,22 @@ public class WebSocketTunnelListener implements WebSocketListener {
         WebXEngineConfiguration engineConfiguration = null;
         WebXHostConfiguration webXConfiguration;
 
+        Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
+        String clientVersion = this.getStringParam(params, WEBX_CLIENT_VERSION);
+
         if (this.configuration.getStandaloneHost() != null && this.configuration.getStandalonePort() != null) {
             String hostname = this.configuration.getStandaloneHost();
             Integer port = this.configuration.getStandalonePort();
             webXConfiguration = new WebXHostConfiguration(hostname, port, true);
 
-            clientConfiguration = WebXClientConfiguration.ForStandaloneSession();
+            clientConfiguration = WebXClientConfiguration.ForStandaloneSession(clientVersion);
 
         } else {
-            Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
 
             // Get all the other params
             Integer port = this.getIntegerParam(params, WEBX_PORT_PARAM);
             String hostname = this.getStringParam(params, WEBX_HOST_PARAM);
             webXConfiguration = new WebXHostConfiguration(hostname, port, false);
-
 
             String sessionId = this.getStringParam(params, WEBX_SESSION_ID_PARAM);
             if (sessionId != null) {
@@ -65,7 +67,7 @@ public class WebSocketTunnelListener implements WebSocketListener {
                     session.close();
                     return;
                 }
-                clientConfiguration = WebXClientConfiguration.ForExistingSession(sessionId);
+                clientConfiguration = WebXClientConfiguration.ForExistingSession(sessionId, clientVersion);
 
             } else {
                 String token = this.getStringParam(params, TOKEN_PARAM);
@@ -87,7 +89,8 @@ public class WebSocketTunnelListener implements WebSocketListener {
                         password,
                         width != null ? width : configuration.getDefaultScreenWidth(),
                         height != null ? height : configuration.getDefaultScreenHeight(),
-                        keyboard != null ? keyboard : configuration.getDefaultKeyboardLayout());
+                        keyboard != null ? keyboard : configuration.getDefaultKeyboardLayout(),
+                        clientVersion);
 
                 engineConfiguration = new WebXEngineConfiguration();
                 engineConfiguration.setParameter("logLevel", "debug");
