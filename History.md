@@ -1,3 +1,9 @@
+1.3.0 03/07/2025
+================
+ * Update webx-relay to 1.7.0
+ * Update readme to remove references to the session-manager
+ * Get the client-version from the socket connection request and pass this in the ClientConfiguration.
+
 1.2.0 31/03/2025
 ================
  * Modifications in line with WebX Relay refactoring.
