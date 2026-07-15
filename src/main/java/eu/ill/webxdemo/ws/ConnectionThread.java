@@ -21,6 +21,10 @@ public class ConnectionThread extends Thread {
     public ConnectionThread(final WebXTunnel tunnel, final Session session) {
         this.tunnel = tunnel;
         this.session = session;
+
+//        this.tunnel.setPingResponseHandler(data -> {
+//            logger.info("Ping RTT to {} in {}ms ", session.getRemoteAddress(), data.rttMs());
+//        });
     }
 
     public void write(byte[] data) {
