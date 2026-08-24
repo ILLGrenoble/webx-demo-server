@@ -23,7 +23,7 @@ public class ConnectionThread extends Thread {
         this.session = session;
 
 //        this.tunnel.setPingResponseHandler(data -> {
-//            logger.info("Ping RTT to {} in {}ms ", session.getRemoteAddress(), data.rttMs());
+//            logger.info("Ping RTT from {} in {}ms ", data.source(), data.rttMs());
 //        });
     }
 
