@@ -4,6 +4,7 @@ import eu.ill.webx.WebXTunnel;
 import eu.ill.webx.exceptions.WebXClientException;
 import eu.ill.webx.exceptions.WebXConnectionInterruptException;
 import eu.ill.webx.exceptions.WebXDisconnectedException;
+import eu.ill.webx.model.PingResponseData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,15 @@ public class ConnectionThread extends Thread {
     public ConnectionThread(final WebXTunnel tunnel, final Session session) {
         this.tunnel = tunnel;
         this.session = session;
+//        Thread pingResponseThread = new Thread(new Runnable() {
+//            public void run() {
+//                PingResponseData data;
+//                while (tunnel.isConnected() && (data = tunnel.takePingResponseData()) != null) {
+//                    logger.info("{}: Ping RTT from {} in {}ms ", data.date(), data.source(), data.rttMs());
+//                }
+//            }
+//        });
+//        pingResponseThread.start();
 
 //        this.tunnel.setPingResponseHandler(data -> {
 //            logger.info("Ping RTT from {} in {}ms ", data.source(), data.rttMs());
